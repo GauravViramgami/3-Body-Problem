@@ -3,6 +3,8 @@
 # Equation Constants (in SI)
 PI = 3.141592
 GRAVITATIONAL_CONSTANT = 6.674e-11
+
+# Conversion of ((m^3)/(s^2)) to ((AU^3)/(yr^2))
 CONVERSION_CONSTANT = ((6.68455e-12)**3)/((3.17098e-8)**2) 
 
 # Mass (in kg)
@@ -19,7 +21,8 @@ MASS = {
     "PLUTO": 6.0e24,
 }
 
-DISTANCE = { #in AU
+# Distance (in AU)
+DISTANCE = { 
     "SUN_MERCURY": 0.39,
     "SUN_VENUS": 0.72,
     "SUN_EARTH": 1.00,
