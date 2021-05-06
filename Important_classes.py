@@ -91,3 +91,11 @@ class TwoBodySystem:
             x_prev, y_prev = (self.orbiting_object2D.x, self.orbiting_object2D.y)
             vx_prev, vy_prev = (self.orbiting_object2D.vx, self.orbiting_object2D.vy)
             ax_prev, ay_prev = (self.orbiting_object2D.ax, self.orbiting_object2D.ay)
+
+    def plot_euler_trajectory(self):
+        plt.plot(self.euler_trajectory[0],self.euler_trajectory[1])
+        plt.show()
+
+    def plot_verlet_trajectory(self):
+        plt.plot(self.verlet_trajectory[0],self.verlet_trajectory[1])
+        plt.show()
