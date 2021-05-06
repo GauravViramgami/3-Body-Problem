@@ -2,7 +2,8 @@
 
 # Equation Constants (in SI)
 PI = 3.141592
-GRAVITATIONAL_CONSTANT = 6.674e-11 
+GRAVITATIONAL_CONSTANT = 6.674e-11
+CONVERSION_CONSTANT = ((6.68455e-12)**3)/((3.17098e-8)**2) 
 
 # Mass (in kg)
 MASS = {
