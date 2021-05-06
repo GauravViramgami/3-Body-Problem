@@ -1,6 +1,6 @@
-from Important_classes.py import *
-from Global_constants.py import *
-star= imp_class.Object2D('Sun',constants.MASS_SUN,0,0,0,0)
+from Important_classes import *
+from Global_constants import *
+star= Object2D('Sun', MASS_SUN,0,0,0,0)
 # planet= imp_class.Object2D()
 
 
