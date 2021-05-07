@@ -11,8 +11,8 @@ class Object2D:
         self.velocity = velocity_initial
         self.acceleration = 0
         
-    def euclideanDistance (self, x, y):
-        r = (((self.position[0] - x)**2) + ((self.position[1] - y)**2))**(1/2)
+    def euclideanDistance (self, from_position):
+        r = (((self.position[0] - from_position[0])**2) + ((self.position[1] - from_position[1])**2))**(1/2)
         return r
     
     def updatePosition (self, x_new, y_new):
@@ -39,7 +39,7 @@ class TwoBodySystem:
         self.updateAcceleration()
 
     def updateAcceleration(self):
-        self.orbiting_object2D.acceleration = [-1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * self.orbiting_object2D.position[0]) / ((self.orbiting_object2D.euclideanDistance(0, 0))**3), -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * self.orbiting_object2D.position[1]) / ((self.orbiting_object2D.euclideanDistance(0, 0))**3)]
+        self.orbiting_object2D.acceleration = [-1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[0] - self.reference_object2D.position[0])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3), -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[1] - self.reference_object2D.position[1])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)]
 
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
@@ -51,9 +51,9 @@ class TwoBodySystem:
         iterations = 0
         while (iterations < num_iterations):
             iterations = iterations + 1
-            r = self.orbiting_object2D.euclideanDistance(0, 0)
+            r = self.orbiting_object2D.euclideanDistance(self.reference_object2D.position)
 
-            self.orbiting_object2D.updateVelocity(vx_prev - ((CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * x_prev)/(r**3)) * stepsize, vy_prev - ((CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * y_prev)/(r**3)) * stepsize) 
+            self.orbiting_object2D.updateVelocity(vx_prev - ((CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (x_prev - self.reference_object2D.position[0]))/(r**3)) * stepsize, vy_prev - ((CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (y_prev - self.reference_object2D.position[1]))/(r**3)) * stepsize) 
 
             self.orbiting_object2D.updatePosition(x_prev + (self.orbiting_object2D.velocity[0] * stepsize), y_prev + (self.orbiting_object2D.velocity[1] * stepsize)) 
             # self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize), y_prev + (vy_prev * stepsize)) # It is working here as non-energy preserving euler method
@@ -74,7 +74,7 @@ class TwoBodySystem:
         iterations = 0
         while (iterations < num_iterations):
             iterations = iterations + 1
-            r = self.orbiting_object2D.euclideanDistance(0, 0)
+            r = self.orbiting_object2D.euclideanDistance(self.reference_object2D.position)
 
             self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize) + ((ax_prev * (stepsize**2))/2), y_prev + (vy_prev * stepsize) + ((ay_prev * (stepsize**2))/2))
             self.updateAcceleration()
