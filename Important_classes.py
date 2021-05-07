@@ -27,7 +27,6 @@ class Object2D:
     def updateAcceleration (self, ax_new, ay_new):
         self.acceleration[0] = ax_new
         self.acceleration[1] = ay_new
-    
 
 class TwoBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D):
@@ -229,7 +228,6 @@ class TwoBodySystem:
                 time_stamp+=1
 
         pygame.quit()
-
 
 class ThreeBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D_1, orbiting_object2D_2):
@@ -830,8 +828,8 @@ class NBodySystem:
                 time_stamp+=1
 
         pygame.quit()
-# Some Predefined Objects
 
+# Some Predefined Objects
 OBJECTS = {
     "SUN": Object2D('SUN', MASS["SUN"],[0,0],[0,0]),
     "MERCURY": Object2D('MERCURY', MASS["MERCURY"],[DISTANCE["SUN_MERCURY"],0],[0, INITIAL_VELOCITY["MERCURY"]]),
