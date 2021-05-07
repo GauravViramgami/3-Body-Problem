@@ -19,10 +19,14 @@ MASS = {
     "URANUS": 8.8e25,
     "NEPTUNE": 1.03e26,
     "PLUTO": 6.0e24,
+    "JUPITER_1000": 1.9e30,
+    "ASTEROID1": 2.8e21,
+    "ASTEROID2": 3.2e21,
 }
 
 # Distance (in AU)
 DISTANCE = { 
+    "SUN_SUN": 1.00,
     "SUN_MERCURY": 0.39,
     "SUN_VENUS": 0.72,
     "SUN_EARTH": 1.00,
@@ -32,6 +36,9 @@ DISTANCE = {
     "SUN_URANUS": 19.8,
     "SUN_NEPTUNE": 30.06,
     "SUN_PLUTO": 39.53,
+    "SUN_JUPITER_1000": 5.20,
+    "SUN_ASTEROID1": 2.7,
+    "SUN_ASTEROID2": 3.1,
 }
 
 # Time Period (in yr)
@@ -45,6 +52,9 @@ TIME_PERIOD = {
     "URANUS": 84.0205,
     "NEPTUNE": 164.8000,
     "PLUTO": 247.9400,
+    "JUPITER_1000": 11.8600,
+    "ASTEROID1": 4,
+    "ASTEROID2": 5,
 }
 
 # Initial Velocity (in AU/yr)
@@ -58,6 +68,9 @@ INITIAL_VELOCITY = {
     "URANUS": 2 * PI * DISTANCE["SUN_URANUS"] / TIME_PERIOD["URANUS"],
     "NEPTUNE": 2 * PI * DISTANCE["SUN_NEPTUNE"] / TIME_PERIOD["NEPTUNE"],
     "PLUTO": 2 * PI * DISTANCE["SUN_PLUTO"] / TIME_PERIOD["PLUTO"],
+    "ASTEROID1": 2 * PI * DISTANCE["SUN_ASTEROID1"] / TIME_PERIOD["ASTEROID1"],
+    "ASTEROID2": 2 * PI * DISTANCE["SUN_ASTEROID2"] / TIME_PERIOD["ASTEROID2"],
+    "JUPITER_1000": 2 * PI * DISTANCE["SUN_JUPITER_1000"] / TIME_PERIOD["JUPITER_1000"],
 }
 
 # Colors for MatplotLib

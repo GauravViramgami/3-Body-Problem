@@ -35,6 +35,7 @@ class TwoBodySystem:
         self.initialize_objects()
         self.variable_trajectory = [[], []]
         self.euler_trajectory = [[], []]
+        self.euler_cromer_trajectory = [[], []]
         self.verlet_trajectory = [[], []]
         self.ronald_ruth_3rdorder_trajectory = [[], []]
         self.ronald_ruth_4thorder_trajectory = [[], []]
@@ -51,9 +52,36 @@ class TwoBodySystem:
         acceleration_reference_orbiting_y = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[1] - self.reference_object2D.position[1])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)
         self.orbiting_object2D.updateAcceleration(acceleration_reference_orbiting_x, acceleration_reference_orbiting_y)
 
-    def euler_cromer_method(self, stepsize, num_iterations):
+    def euler_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
+        
+        x_prev, y_prev = self.orbiting_object2D.position_initial
+        vx_prev, vy_prev = self.orbiting_object2D.velocity_initial
+
+        iterations = 0
+        while (iterations < num_iterations):
+            iterations = iterations + 1
+            
+            self.orbiting_object2D.updateVelocity(vx_prev + (self.orbiting_object2D.acceleration[0] * stepsize), vy_prev + (self.orbiting_object2D.acceleration[1] * stepsize)) 
+
+            # self.orbiting_object2D.updatePosition(x_prev + (self.orbiting_object2D.velocity[0] * stepsize), y_prev + (self.orbiting_object2D.velocity[1] * stepsize)) 
+
+            # It is working here as non-energy preserving euler method
+            self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize), y_prev + (vy_prev * stepsize)) 
+
+            self.updateAcceleration()
+            self.euler_trajectory[0].append(self.orbiting_object2D.position[0])
+            self.euler_trajectory[1].append(self.orbiting_object2D.position[1])
+
+            x_prev, y_prev = self.orbiting_object2D.position
+            vx_prev, vy_prev = self.orbiting_object2D.velocity
+
+        self.variable_trajectory = self.euler_trajectory
+
+    def euler_cromer_method(self, stepsize, num_iterations):
+        self.initialize_objects()
+        self.euler_cromer_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
         
         x_prev, y_prev = self.orbiting_object2D.position_initial
         vx_prev, vy_prev = self.orbiting_object2D.velocity_initial
@@ -70,13 +98,13 @@ class TwoBodySystem:
             # self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize), y_prev + (vy_prev * stepsize)) 
 
             self.updateAcceleration()
-            self.euler_trajectory[0].append(self.orbiting_object2D.position[0])
-            self.euler_trajectory[1].append(self.orbiting_object2D.position[1])
+            self.euler_cromer_trajectory[0].append(self.orbiting_object2D.position[0])
+            self.euler_cromer_trajectory[1].append(self.orbiting_object2D.position[1])
 
             x_prev, y_prev = self.orbiting_object2D.position
             vx_prev, vy_prev = self.orbiting_object2D.velocity
 
-        self.variable_trajectory = self.euler_trajectory
+        self.variable_trajectory = self.euler_cromer_trajectory
 
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -188,23 +216,48 @@ class TwoBodySystem:
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
 
     def plot_euler_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_trajectory[0], self.euler_trajectory[1], label = self.orbiting_object2D.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
+        plt.show()
+
+    def plot_euler_cromer_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
+        plt.plot(self.euler_cromer_trajectory[0], self.euler_cromer_trajectory[1], label = self.orbiting_object2D.name)
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler Cromer (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_verlet_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.verlet_trajectory[0], self.verlet_trajectory[1], label = self.orbiting_object2D.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Verlet (2nd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_3rdorder_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_3rdorder_trajectory[0], self.ronald_ruth_3rdorder_trajectory[1], label = self.orbiting_object2D.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (3rd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_4thorder_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_4thorder_trajectory[0], self.ronald_ruth_4thorder_trajectory[1], label = self.orbiting_object2D.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (4th Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def visualize_trajectory(self):
@@ -237,6 +290,7 @@ class ThreeBodySystem:
         self.initialize_objects()
         self.variable_trajectory = [[[], []], [[], []]]
         self.euler_trajectory = [[[], []], [[], []]]
+        self.euler_cromer_trajectory = [[[], []], [[], []]]
         self.verlet_trajectory = [[[], []], [[], []]]
         self.ronald_ruth_3rdorder_trajectory = [[[], []], [[], []]]
         self.ronald_ruth_4thorder_trajectory = [[[], []], [[], []]]
@@ -264,10 +318,46 @@ class ThreeBodySystem:
         self.orbiting_object2D_1.updateAcceleration(acceleration_reference_orbiting1_x + acceleration_orbiting2_orbiting1_x, acceleration_reference_orbiting1_y + acceleration_orbiting2_orbiting1_y)
         self.orbiting_object2D_2.updateAcceleration(acceleration_reference_orbiting2_x + acceleration_orbiting1_orbiting2_x, acceleration_reference_orbiting2_y + acceleration_orbiting1_orbiting2_y)
 
+    def euler_method(self, stepsize, num_iterations):
+        self.initialize_objects()
+        self.euler_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
+        
+        orbiting1_x_prev, orbiting1_y_prev = self.orbiting_object2D_1.position_initial
+        orbiting2_x_prev, orbiting2_y_prev = self.orbiting_object2D_2.position_initial
+        orbiting1_vx_prev, orbiting1_vy_prev = self.orbiting_object2D_1.velocity_initial
+        orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity_initial
+
+        iterations = 0
+        while (iterations < num_iterations):
+            iterations = iterations + 1
+            
+            self.orbiting_object2D_1.updateVelocity(orbiting1_vx_prev + (self.orbiting_object2D_1.acceleration[0] * stepsize), orbiting1_vy_prev + (self.orbiting_object2D_1.acceleration[1] * stepsize)) 
+            self.orbiting_object2D_2.updateVelocity(orbiting2_vx_prev + (self.orbiting_object2D_2.acceleration[0] * stepsize), orbiting2_vy_prev + (self.orbiting_object2D_2.acceleration[1] * stepsize)) 
+
+            # self.orbiting_object2D_1.updatePosition(orbiting1_x_prev + (self.orbiting_object2D_1.velocity[0] * stepsize), orbiting1_y_prev + (self.orbiting_object2D_1.velocity[1] * stepsize))
+            # self.orbiting_object2D_2.updatePosition(orbiting2_x_prev + (self.orbiting_object2D_2.velocity[0] * stepsize), orbiting2_y_prev + (self.orbiting_object2D_2.velocity[1] * stepsize)) 
+
+            # It is working here as non-energy preserving euler method
+            self.orbiting_object2D_1.updatePosition(orbiting1_x_prev + (orbiting1_vx_prev * stepsize), orbiting1_y_prev + (orbiting1_vy_prev * stepsize))
+            self.orbiting_object2D_2.updatePosition(orbiting2_x_prev + (orbiting2_vx_prev * stepsize), orbiting2_y_prev + (orbiting2_vy_prev * stepsize)) 
+            
+            self.updateAcceleration()
+
+            self.euler_trajectory[0][0].append(self.orbiting_object2D_1.position[0])
+            self.euler_trajectory[0][1].append(self.orbiting_object2D_1.position[1])
+            self.euler_trajectory[1][0].append(self.orbiting_object2D_2.position[0])
+            self.euler_trajectory[1][1].append(self.orbiting_object2D_2.position[1])
+
+            orbiting1_x_prev, orbiting1_y_prev = self.orbiting_object2D_1.position
+            orbiting2_x_prev, orbiting2_y_prev = self.orbiting_object2D_2.position
+            orbiting1_vx_prev, orbiting1_vy_prev = self.orbiting_object2D_1.velocity
+            orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
+
+        self.variable_trajectory = self.euler_trajectory
 
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
-        self.euler_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
+        self.euler_cromer_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
         
         orbiting1_x_prev, orbiting1_y_prev = self.orbiting_object2D_1.position_initial
         orbiting2_x_prev, orbiting2_y_prev = self.orbiting_object2D_2.position_initial
@@ -290,17 +380,17 @@ class ThreeBodySystem:
             
             self.updateAcceleration()
 
-            self.euler_trajectory[0][0].append(self.orbiting_object2D_1.position[0])
-            self.euler_trajectory[0][1].append(self.orbiting_object2D_1.position[1])
-            self.euler_trajectory[1][0].append(self.orbiting_object2D_2.position[0])
-            self.euler_trajectory[1][1].append(self.orbiting_object2D_2.position[1])
+            self.euler_cromer_trajectory[0][0].append(self.orbiting_object2D_1.position[0])
+            self.euler_cromer_trajectory[0][1].append(self.orbiting_object2D_1.position[1])
+            self.euler_cromer_trajectory[1][0].append(self.orbiting_object2D_2.position[0])
+            self.euler_cromer_trajectory[1][1].append(self.orbiting_object2D_2.position[1])
 
             orbiting1_x_prev, orbiting1_y_prev = self.orbiting_object2D_1.position
             orbiting2_x_prev, orbiting2_y_prev = self.orbiting_object2D_2.position
             orbiting1_vx_prev, orbiting1_vy_prev = self.orbiting_object2D_1.velocity
             orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
 
-        self.variable_trajectory = self.euler_trajectory
+        self.variable_trajectory = self.euler_cromer_trajectory
 
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -496,27 +586,53 @@ class ThreeBodySystem:
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
 
     def plot_euler_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_trajectory[0][0], self.euler_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.euler_trajectory[1][0], self.euler_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
+        plt.show()
+
+    def plot_euler_cromer_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
+        plt.plot(self.euler_cromer_trajectory[0][0], self.euler_cromer_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
+        plt.plot(self.euler_cromer_trajectory[1][0], self.euler_cromer_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler Cromer (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_verlet_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.verlet_trajectory[0][0], self.verlet_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.verlet_trajectory[1][0], self.verlet_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Verlet (2nd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_3rd_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_3rd_trajectory[0][0], self.ronald_ruth_3rd_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.ronald_ruth_3rd_trajectory[1][0], self.ronald_ruth_3rd_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (3rd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_4th_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_4th_trajectory[0][0], self.ronald_ruth_4th_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.ronald_ruth_4th_trajectory[1][0], self.ronald_ruth_4th_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (4th Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def visualize_trajectory(self):
@@ -552,6 +668,7 @@ class NBodySystem:
         self.initialize_objects()
         self.variable_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.euler_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
+        self.euler_cromer_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.verlet_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.ronald_ruth_3rdorder_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.ronald_ruth_4thorder_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
@@ -576,9 +693,45 @@ class NBodySystem:
 
             self.orbiting_objects2D[i].updateAcceleration(acceleration_x, acceleration_y)
 
-    def euler_cromer_method(self, stepsize, num_iterations):
+    def euler_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
+        
+        orbiting_x_prev = [self.orbiting_objects2D[i].position_initial[0] for i in range(len(self.orbiting_objects2D))]
+        orbiting_y_prev = [self.orbiting_objects2D[i].position_initial[1] for i in range(len(self.orbiting_objects2D))]
+        orbiting_vx_prev = [self.orbiting_objects2D[i].velocity_initial[0] for i in range(len(self.orbiting_objects2D))]
+        orbiting_vy_prev = [self.orbiting_objects2D[i].velocity_initial[1] for i in range(len(self.orbiting_objects2D))]
+
+        iterations = 0
+        while (iterations < num_iterations):
+            iterations = iterations + 1
+
+            for i in range(len(self.orbiting_objects2D)):
+                self.orbiting_objects2D[i].updateVelocity(orbiting_vx_prev[i] + (self.orbiting_objects2D[i].acceleration[0] * stepsize), orbiting_vy_prev[i] + (self.orbiting_objects2D[i].acceleration[1] * stepsize))
+
+            # for i in range(len(self.orbiting_objects2D)):
+            #     self.orbiting_objects2D[i].updatePosition(orbiting_x_prev[i] + (self.orbiting_objects2D[i].velocity[0] * stepsize), orbiting_y_prev[i] + (self.orbiting_objects2D[i].velocity[1] * stepsize))
+
+            # It is working here as non-energy preserving euler method
+            for i in range(len(self.orbiting_objects2D)):
+                self.orbiting_objects2D[i].updatePosition(orbiting_x_prev[i] + (orbiting_vx_prev[i] * stepsize), orbiting_y_prev[i] + (orbiting_vy_prev[i] * stepsize))
+            
+            self.updateAcceleration()
+
+            for i in range(len(self.orbiting_objects2D)):
+                self.euler_trajectory[i][0].append(self.orbiting_objects2D[i].position[0])
+                self.euler_trajectory[i][1].append(self.orbiting_objects2D[i].position[1])
+
+            orbiting_x_prev = [self.orbiting_objects2D[i].position[0] for i in range(len(self.orbiting_objects2D))]
+            orbiting_y_prev = [self.orbiting_objects2D[i].position[1] for i in range(len(self.orbiting_objects2D))]
+            orbiting_vx_prev = [self.orbiting_objects2D[i].velocity[0] for i in range(len(self.orbiting_objects2D))]
+            orbiting_vy_prev = [self.orbiting_objects2D[i].velocity[1] for i in range(len(self.orbiting_objects2D))]
+
+        self.variable_trajectory = self.euler_trajectory
+
+    def euler_cromer_method(self, stepsize, num_iterations):
+        self.initialize_objects()
+        self.euler_cromer_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
         
         orbiting_x_prev = [self.orbiting_objects2D[i].position_initial[0] for i in range(len(self.orbiting_objects2D))]
         orbiting_y_prev = [self.orbiting_objects2D[i].position_initial[1] for i in range(len(self.orbiting_objects2D))]
@@ -602,15 +755,15 @@ class NBodySystem:
             self.updateAcceleration()
 
             for i in range(len(self.orbiting_objects2D)):
-                self.euler_trajectory[i][0].append(self.orbiting_objects2D[i].position[0])
-                self.euler_trajectory[i][1].append(self.orbiting_objects2D[i].position[1])
+                self.euler_cromer_trajectory[i][0].append(self.orbiting_objects2D[i].position[0])
+                self.euler_cromer_trajectory[i][1].append(self.orbiting_objects2D[i].position[1])
 
             orbiting_x_prev = [self.orbiting_objects2D[i].position[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_y_prev = [self.orbiting_objects2D[i].position[1] for i in range(len(self.orbiting_objects2D))]
             orbiting_vx_prev = [self.orbiting_objects2D[i].velocity[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_vy_prev = [self.orbiting_objects2D[i].velocity[1] for i in range(len(self.orbiting_objects2D))]
 
-        self.variable_trajectory = self.euler_trajectory
+        self.variable_trajectory = self.euler_cromer_trajectory
 
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -777,27 +930,53 @@ class NBodySystem:
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
             
     def plot_euler_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.euler_trajectory[i][0], self.euler_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
+        plt.show()
+
+    def plot_euler_cromer_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
+        for i in range(len(self.orbiting_objects2D)):
+            plt.plot(self.euler_cromer_trajectory[i][0], self.euler_cromer_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Euler Cromer (1st Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_verlet_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.verlet_trajectory[i][0], self.verlet_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Verlet (2nd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_3rdorder_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.ronald_ruth_3rdorder_trajectory[i][0], self.ronald_ruth_3rdorder_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (3rd Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def plot_ronald_ruth_4thorder_trajectory(self):
+        plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.ronald_ruth_4thorder_trajectory[i][0], self.ronald_ruth_4thorder_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
-        plt.legend(loc = 'best')
+        plt.legend(loc = 'lower right')
+        plt.title("Trajectory using Ronald Ruth (4th Order) Method")
+        plt.xlabel("x positions (in AU)")
+        plt.ylabel("y positions (in AU)")
         plt.show()
 
     def visualize_trajectory(self):
@@ -841,6 +1020,9 @@ OBJECTS = {
     "URANUS": Object2D('URANUS', MASS["URANUS"],[DISTANCE["SUN_URANUS"],0],[0, INITIAL_VELOCITY["URANUS"]]),
     "NEPTUNE": Object2D('NEPTUNE', MASS["NEPTUNE"],[DISTANCE["SUN_NEPTUNE"],0],[0, INITIAL_VELOCITY["NEPTUNE"]]),
     "PLUTO": Object2D('PLUTO', MASS["PLUTO"],[DISTANCE["SUN_PLUTO"],0],[0, INITIAL_VELOCITY["PLUTO"]]),
-    "STAR1": Object2D('EARTH', MASS["EARTH"],[DISTANCE["SUN_EARTH"],0],[0, INITIAL_VELOCITY["EARTH"]]),
+    "STAR1": Object2D('SUN', MASS["SUN"],[3*DISTANCE["SUN_EARTH"]/2 ,0],[0, -INITIAL_VELOCITY["EARTH"]]),
     "STAR2": Object2D('EARTH', MASS["EARTH"],[1 + DISTANCE["SUN_EARTH"],0],[0, INITIAL_VELOCITY["EARTH"]]),
+    "ASTEROID1": Object2D('ASTEROID1', MASS["ASTEROID1"],[DISTANCE["SUN_ASTEROID1"],0],[0, INITIAL_VELOCITY["ASTEROID1"]]),
+    "ASTEROID2": Object2D('ASTEROID2', MASS["ASTEROID2"],[DISTANCE["SUN_ASTEROID2"],0],[0, INITIAL_VELOCITY["ASTEROID2"]]),
+    "JUPITER_1000": Object2D('JUPITER_1000', MASS["JUPITER_1000"],[DISTANCE["SUN_JUPITER_1000"],0],[0, INITIAL_VELOCITY["JUPITER_1000"]]),
 }
