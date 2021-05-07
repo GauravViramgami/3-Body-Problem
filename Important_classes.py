@@ -776,6 +776,34 @@ class NBodySystem:
         plt.legend(loc = 'best')
         plt.show()
 
+    def visualize_trajectory(self):
+        pygame.init()
+        win = pygame.display.set_mode((720,720))
+        radius=7.5
+        time_stamp=0
+        length=len(self.euler_trajectory[0][0])
+        run=True
+        pygame.draw.circle(win,(255,255,0),(360,360),radius)
+        scaling=1
+
+        for i in range(len(self.orbiting_objects2D)):
+            scaling=max(scaling,DISTANCE["SUN_"+self.orbiting_objects2D[i].name])
+
+        while run:
+            pygame.time.delay(10)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+            
+            for i in range(len(self.orbiting_objects2D)):
+                pygame.draw.circle(win, COLORS_PYGAME[i%len(COLORS_PYGAME)], (self.euler_trajectory[i][0][time_stamp]*330/scaling + 360 , self.euler_trajectory[i][1][time_stamp]*330/scaling + 360), radius/3)
+                
+            pygame.display.update()
+            if time_stamp<length-2:
+                time_stamp+=1
+
+        pygame.quit()
 # Some Predefined Objects
 
 OBJECTS = {
