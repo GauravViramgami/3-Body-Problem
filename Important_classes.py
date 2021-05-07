@@ -201,25 +201,26 @@ class TwoBodySystem:
 
     def visualize_trajectory(self):
         pygame.init()
-        win = pygame.display.set_mode((500,500))
-        radius=6
+        win = pygame.display.set_mode((720,720))
+        radius=7.5
         time_stamp=0
         length=len(self.euler_trajectory[0])
         run=True
+        pygame.draw.circle(win,(255,255,0),(360,360),radius)
         while run:
-            pygame.time.delay(100)
+            pygame.time.delay(50)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-
-            pygame.draw.circle(win, (0, 200, 255), (0, 0), 3)
+            pygame.draw.circle(win, (0, 200, 255), (self.euler_trajectory[0][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360 , self.euler_trajectory[1][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360), radius/3)
 
             pygame.display.update()
             if time_stamp<length-2:
                 time_stamp+=1
 
         pygame.quit()
+
 
 class ThreeBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D_1, orbiting_object2D_2):
@@ -400,6 +401,7 @@ class ThreeBodySystem:
             orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
             orbiting1_ax_prev, orbiting1_ay_prev = self.orbiting_object2D_1.acceleration
             orbiting2_ax_prev, orbiting2_ay_prev = self.orbiting_object2D_2.acceleration
+    
 
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -501,6 +503,32 @@ class ThreeBodySystem:
         plt.plot(self.ronald_ruth_4th_trajectory[1][0], self.ronald_ruth_4th_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
         plt.legend(loc = 'best')
         plt.show()
+
+    def visualize_trajectory(self):
+        pygame.init()
+        win = pygame.display.set_mode((720,720))
+        radius=7.5
+        time_stamp=0
+        length=len(self.euler_trajectory[0][0])
+        run=True
+        pygame.draw.circle(win,(255,255,0),(360,360),radius)
+
+        scaling=max(DISTANCE["SUN_"+self.orbiting_object2D_1.name],DISTANCE["SUN_"+self.orbiting_object2D_2.name])
+
+        while run:
+            pygame.time.delay(20)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+            pygame.draw.circle(win, (255, 0, 255), (self.euler_trajectory[0][0][time_stamp]*300/scaling + 360 , self.euler_trajectory[0][1][time_stamp]*300/scaling + 360), radius/3)
+            pygame.draw.circle(win, (0, 200, 255), (self.euler_trajectory[1][0][time_stamp]*300/scaling + 360 , self.euler_trajectory[1][1][time_stamp]*300/scaling + 360), radius/3)
+
+            pygame.display.update()
+            if time_stamp<length-2:
+                time_stamp+=1
+
+        pygame.quit()
 
 class NBodySystem:
     def __init__ (self, reference_object2D, orbiting_objects2D):
