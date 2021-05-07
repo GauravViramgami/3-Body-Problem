@@ -9,7 +9,7 @@ CONVERSION_CONSTANT = ((6.68455e-12)**3)/((3.17098e-8)**2)
 
 # Mass (in kg)
 MASS = {
-    "SUN": 5 * 1.989e30, 
+    "SUN": 1.989e30, 
     "MERCURY": 2.4e23,
     "VENUS": 4.9e24,
     "EARTH": 6.0e24,
