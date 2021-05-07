@@ -34,6 +34,7 @@ class TwoBodySystem:
         self.reference_object2D = reference_object2D
         self.orbiting_object2D = orbiting_object2D
         self.initialize_objects()
+        self.variable_trajectory = [[], []]
         self.euler_trajectory = [[], []]
         self.verlet_trajectory = [[], []]
         self.ronald_ruth_3rdorder_trajectory = [[], []]
@@ -76,6 +77,8 @@ class TwoBodySystem:
             x_prev, y_prev = self.orbiting_object2D.position
             vx_prev, vy_prev = self.orbiting_object2D.velocity
 
+        self.variable_trajectory = self.euler_trajectory
+
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -98,6 +101,8 @@ class TwoBodySystem:
             x_prev, y_prev = self.orbiting_object2D.position
             vx_prev, vy_prev = self.orbiting_object2D.velocity
             ax_prev, ay_prev = self.orbiting_object2D.acceleration
+
+        self.variable_trajectory = self.verlet_trajectory
 
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -139,6 +144,8 @@ class TwoBodySystem:
             vx_prev, vy_prev = self.orbiting_object2D.velocity
             ax_prev, ay_prev = self.orbiting_object2D.acceleration
 
+        self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
+
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -179,6 +186,8 @@ class TwoBodySystem:
             vx_prev, vy_prev = self.orbiting_object2D.velocity
             ax_prev, ay_prev = self.orbiting_object2D.acceleration
 
+        self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
+
     def plot_euler_trajectory(self):
         plt.plot(self.euler_trajectory[0], self.euler_trajectory[1], label = self.orbiting_object2D.name)
         plt.legend(loc = 'best')
@@ -204,7 +213,7 @@ class TwoBodySystem:
         win = pygame.display.set_mode((720,720))
         radius=7.5
         time_stamp=0
-        length=len(self.euler_trajectory[0])
+        length=len(self.variable_trajectory[0])
         run=True
         pygame.draw.circle(win,(255,255,0),(360,360),radius)
         while run:
@@ -213,7 +222,7 @@ class TwoBodySystem:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-            pygame.draw.circle(win, (0, 200, 255), (self.euler_trajectory[0][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360 , self.euler_trajectory[1][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360), radius/3)
+            pygame.draw.circle(win, (0, 200, 255), (self.variable_trajectory[0][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360 , self.variable_trajectory[1][time_stamp]*300/DISTANCE["SUN_"+self.orbiting_object2D.name] + 360), radius/3)
 
             pygame.display.update()
             if time_stamp<length-2:
@@ -228,6 +237,7 @@ class ThreeBodySystem:
         self.orbiting_object2D_1 = orbiting_object2D_1
         self.orbiting_object2D_2 = orbiting_object2D_2
         self.initialize_objects()
+        self.variable_trajectory = [[[], []], [[], []]]
         self.euler_trajectory = [[[], []], [[], []]]
         self.verlet_trajectory = [[[], []], [[], []]]
         self.ronald_ruth_3rdorder_trajectory = [[[], []], [[], []]]
@@ -292,6 +302,8 @@ class ThreeBodySystem:
             orbiting1_vx_prev, orbiting1_vy_prev = self.orbiting_object2D_1.velocity
             orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
 
+        self.variable_trajectory = self.euler_trajectory
+
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -324,6 +336,8 @@ class ThreeBodySystem:
             orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
             orbiting1_ax_prev, orbiting1_ay_prev = self.orbiting_object2D_1.acceleration
             orbiting2_ax_prev, orbiting2_ay_prev = self.orbiting_object2D_2.acceleration
+
+        self.variable_trajectory = self.verlet_trajectory
 
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -401,7 +415,8 @@ class ThreeBodySystem:
             orbiting2_vx_prev, orbiting2_vy_prev = self.orbiting_object2D_2.velocity
             orbiting1_ax_prev, orbiting1_ay_prev = self.orbiting_object2D_1.acceleration
             orbiting2_ax_prev, orbiting2_ay_prev = self.orbiting_object2D_2.acceleration
-    
+
+        self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
 
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -480,6 +495,8 @@ class ThreeBodySystem:
             orbiting1_ax_prev, orbiting1_ay_prev = self.orbiting_object2D_1.acceleration
             orbiting2_ax_prev, orbiting2_ay_prev = self.orbiting_object2D_2.acceleration
 
+        self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
+
     def plot_euler_trajectory(self):
         plt.plot(self.euler_trajectory[0][0], self.euler_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.euler_trajectory[1][0], self.euler_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
@@ -509,7 +526,7 @@ class ThreeBodySystem:
         win = pygame.display.set_mode((720,720))
         radius=7.5
         time_stamp=0
-        length=len(self.euler_trajectory[0][0])
+        length=len(self.variable_trajectory[0][0])
         run=True
         pygame.draw.circle(win,(255,255,0),(360,360),radius)
 
@@ -521,8 +538,8 @@ class ThreeBodySystem:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-            pygame.draw.circle(win, (255, 0, 255), (self.euler_trajectory[0][0][time_stamp]*300/scaling + 360 , self.euler_trajectory[0][1][time_stamp]*300/scaling + 360), radius/3)
-            pygame.draw.circle(win, (0, 200, 255), (self.euler_trajectory[1][0][time_stamp]*300/scaling + 360 , self.euler_trajectory[1][1][time_stamp]*300/scaling + 360), radius/3)
+            pygame.draw.circle(win, (255, 0, 255), (self.variable_trajectory[0][0][time_stamp]*300/scaling + 360 , self.variable_trajectory[0][1][time_stamp]*300/scaling + 360), radius/3)
+            pygame.draw.circle(win, (0, 200, 255), (self.variable_trajectory[1][0][time_stamp]*300/scaling + 360 , self.variable_trajectory[1][1][time_stamp]*300/scaling + 360), radius/3)
 
             pygame.display.update()
             if time_stamp<length-2:
@@ -535,6 +552,7 @@ class NBodySystem:
         self.reference_object2D = reference_object2D
         self.orbiting_objects2D = orbiting_objects2D
         self.initialize_objects()
+        self.variable_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.euler_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.verlet_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.ronald_ruth_3rdorder_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
@@ -594,6 +612,8 @@ class NBodySystem:
             orbiting_vx_prev = [self.orbiting_objects2D[i].velocity[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_vy_prev = [self.orbiting_objects2D[i].velocity[1] for i in range(len(self.orbiting_objects2D))]
 
+        self.variable_trajectory = self.euler_trajectory
+
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -627,6 +647,8 @@ class NBodySystem:
             orbiting_vy_prev = [self.orbiting_objects2D[i].velocity[1] for i in range(len(self.orbiting_objects2D))]
             orbiting_ax_prev = [self.orbiting_objects2D[i].acceleration[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_ay_prev = [self.orbiting_objects2D[i].acceleration[1] for i in range(len(self.orbiting_objects2D))]
+
+        self.variable_trajectory = self.verlet_trajectory
 
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
@@ -690,6 +712,8 @@ class NBodySystem:
             orbiting_ax_prev = [self.orbiting_objects2D[i].acceleration[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_ay_prev = [self.orbiting_objects2D[i].acceleration[1] for i in range(len(self.orbiting_objects2D))]
 
+        self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
+
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -751,6 +775,8 @@ class NBodySystem:
             orbiting_vy_prev = [self.orbiting_objects2D[i].velocity[1] for i in range(len(self.orbiting_objects2D))]
             orbiting_ax_prev = [self.orbiting_objects2D[i].acceleration[0] for i in range(len(self.orbiting_objects2D))]
             orbiting_ay_prev = [self.orbiting_objects2D[i].acceleration[1] for i in range(len(self.orbiting_objects2D))]
+
+        self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
             
     def plot_euler_trajectory(self):
         for i in range(len(self.orbiting_objects2D)):
@@ -781,7 +807,7 @@ class NBodySystem:
         win = pygame.display.set_mode((720,720))
         radius=7.5
         time_stamp=0
-        length=len(self.euler_trajectory[0][0])
+        length=len(self.variable_trajectory[0][0])
         run=True
         pygame.draw.circle(win,(255,255,0),(360,360),radius)
         scaling=1
@@ -797,7 +823,7 @@ class NBodySystem:
                     run = False
             
             for i in range(len(self.orbiting_objects2D)):
-                pygame.draw.circle(win, COLORS_PYGAME[i%len(COLORS_PYGAME)], (self.euler_trajectory[i][0][time_stamp]*330/scaling + 360 , self.euler_trajectory[i][1][time_stamp]*330/scaling + 360), radius/3)
+                pygame.draw.circle(win, COLORS_PYGAME[i%len(COLORS_PYGAME)], (self.variable_trajectory[i][0][time_stamp]*330/scaling + 360 , self.variable_trajectory[i][1][time_stamp]*330/scaling + 360), radius/3)
                 
             pygame.display.update()
             if time_stamp<length-2:
