@@ -150,7 +150,7 @@ class TwoBodySystem:
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
 
-        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2*(2-(2**(1/3)))), -(2**(1/3))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3)))), 0]]
+        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2-(2**(1/3))), -(2**(1/3))/(2-(2**(1/3))), 1/(2-(2**(1/3))), 0]]
 
         x_prev, y_prev = self.orbiting_object2D.position_initial
         vx_prev, vy_prev = self.orbiting_object2D.velocity_initial
@@ -203,8 +203,8 @@ class TwoBodySystem:
         plt.legend(loc = 'best')
         plt.show()
 
-    def plot_ronald_ruth_3rdorder_trajectory(self):
-        plt.plot(self.ronald_ruth_3rdorder_trajectory[0], self.ronald_ruth_3rdorder_trajectory[1], label = self.orbiting_object2D.name)
+    def plot_ronald_ruth_4thorder_trajectory(self):
+        plt.plot(self.ronald_ruth_4thorder_trajectory[0], self.ronald_ruth_4thorder_trajectory[1], label = self.orbiting_object2D.name)
         plt.legend(loc = 'best')
         plt.show()
 
@@ -422,7 +422,7 @@ class ThreeBodySystem:
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
 
-        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2*(2-(2**(1/3)))), -(2**(1/3))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3)))), 0]]
+        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2-(2**(1/3))), -(2**(1/3))/(2-(2**(1/3))), 1/(2-(2**(1/3))), 0]]
 
         orbiting1_x_prev, orbiting1_y_prev = self.orbiting_object2D_1.position_initial
         orbiting2_x_prev, orbiting2_y_prev = self.orbiting_object2D_2.position_initial
@@ -718,7 +718,7 @@ class NBodySystem:
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
 
-        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2*(2-(2**(1/3)))), -(2**(1/3))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3)))), 0]]
+        coefficients = [[1/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), (1-(2**(1/3)))/(2*(2-(2**(1/3)))), 1/(2*(2-(2**(1/3))))], [1/(2-(2**(1/3))), -(2**(1/3))/(2-(2**(1/3))), 1/(2-(2**(1/3))), 0]]
 
         orbiting_x_prev = [self.orbiting_objects2D[i].position_initial[0] for i in range(len(self.orbiting_objects2D))]
         orbiting_y_prev = [self.orbiting_objects2D[i].position_initial[1] for i in range(len(self.orbiting_objects2D))]
