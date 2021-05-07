@@ -9,7 +9,7 @@ class Object2D:
         self.velocity_initial = velocity_initial
         self.position = position_initial
         self.velocity = velocity_initial
-        self.acceleration = 0
+        self.acceleration = [0, 0]
         
     def euclideanDistance (self, from_position):
         r = (((self.position[0] - from_position[0])**2) + ((self.position[1] - from_position[1])**2))**(1/2)
@@ -22,6 +22,10 @@ class Object2D:
     def updateVelocity (self, vx_new, vy_new):
         self.velocity[0] = vx_new
         self.velocity[1] = vy_new
+    
+    def updateAcceleration (self, ax_new, ay_new):
+        self.acceleration[0] = ax_new
+        self.acceleration[1] = ay_new
 
 class TwoBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D):
@@ -41,7 +45,7 @@ class TwoBodySystem:
     def updateAcceleration(self):
         acceleration_reference_orbiting_x = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[0] - self.reference_object2D.position[0])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)
         acceleration_reference_orbiting_y = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[1] - self.reference_object2D.position[1])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)
-        self.orbiting_object2D.acceleration = [acceleration_reference_orbiting_x, acceleration_reference_orbiting_y]
+        self.orbiting_object2D.updateAcceleration(acceleration_reference_orbiting_x, acceleration_reference_orbiting_y)
 
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
@@ -93,10 +97,12 @@ class TwoBodySystem:
 
     def plot_euler_trajectory(self):
         plt.plot(self.euler_trajectory[0],self.euler_trajectory[1])
+        plt.legend(loc = 'best')
         plt.show()
 
     def plot_verlet_trajectory(self):
         plt.plot(self.verlet_trajectory[0],self.verlet_trajectory[1])
+        plt.legend(loc = 'best')
         plt.show()
 
 class ThreeBodySystem:
@@ -128,8 +134,8 @@ class ThreeBodySystem:
         acceleration_reference_orbiting2_y = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D_2.position[1] - self.reference_object2D.position[1])) / ((self.orbiting_object2D_2.euclideanDistance(self.reference_object2D.position))**3)
         acceleration_orbiting1_orbiting2_y = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.orbiting_object2D_1.name] * (self.orbiting_object2D_2.position[1] - self.orbiting_object2D_1.position[1])) / ((self.orbiting_object2D_2.euclideanDistance(self.orbiting_object2D_1.position))**3)
         
-        self.orbiting_object2D_1.acceleration = [acceleration_reference_orbiting1_x + acceleration_orbiting2_orbiting1_x, acceleration_reference_orbiting1_y + acceleration_orbiting2_orbiting1_y]
-        self.orbiting_object2D_2.acceleration = [acceleration_reference_orbiting2_x + acceleration_orbiting1_orbiting2_x, acceleration_reference_orbiting2_y + acceleration_orbiting1_orbiting2_y]
+        self.orbiting_object2D_1.updateAcceleration(acceleration_reference_orbiting1_x + acceleration_orbiting2_orbiting1_x, acceleration_reference_orbiting1_y + acceleration_orbiting2_orbiting1_y)
+        self.orbiting_object2D_2.updateAcceleration(acceleration_reference_orbiting2_x + acceleration_orbiting1_orbiting2_x, acceleration_reference_orbiting2_y + acceleration_orbiting1_orbiting2_y)
 
 
     def euler_cromer_method(self, stepsize, num_iterations):
@@ -203,11 +209,13 @@ class ThreeBodySystem:
     def plot_euler_trajectory(self):
         plt.plot(self.euler_trajectory[0][0], self.euler_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.euler_trajectory[1][0], self.euler_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
+        plt.legend(loc = 'best')
         plt.show()
 
     def plot_verlet_trajectory(self):
         plt.plot(self.verlet_trajectory[0][0], self.verlet_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
         plt.plot(self.verlet_trajectory[1][0], self.verlet_trajectory[1][1], color = 'g', label = self.orbiting_object2D_2.name)
+        plt.legend(loc = 'best')
         plt.show()
 
 class NBodySystem:
@@ -236,7 +244,7 @@ class NBodySystem:
                     acceleration_x += -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.orbiting_objects2D[j].name] * (self.orbiting_objects2D[i].position[0] - self.orbiting_objects2D[j].position[0])) / ((self.orbiting_objects2D[i].euclideanDistance(self.orbiting_objects2D[j].position))**3)
                     acceleration_y += -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.orbiting_objects2D[j].name] * (self.orbiting_objects2D[i].position[1] - self.orbiting_objects2D[j].position[1])) / ((self.orbiting_objects2D[i].euclideanDistance(self.orbiting_objects2D[j].position))**3)
 
-            self.orbiting_objects2D[i].acceleration = [acceleration_x, acceleration_y]
+            self.orbiting_objects2D[i].updateAcceleration(acceleration_x, acceleration_y)
 
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
@@ -309,11 +317,13 @@ class NBodySystem:
     def plot_euler_trajectory(self):
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.euler_trajectory[i][0], self.euler_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
+        plt.legend(loc = 'best')
         plt.show()
 
     def plot_verlet_trajectory(self):
         for i in range(len(self.orbiting_objects2D)):
             plt.plot(self.verlet_trajectory[i][0], self.verlet_trajectory[i][1], color = COLORS[i % len(COLORS)], label = self.orbiting_objects2D[i].name)    
+        plt.legend(loc = 'best')
         plt.show()
 
 # Some Predefined Objects
