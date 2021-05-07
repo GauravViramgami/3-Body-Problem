@@ -59,3 +59,7 @@ INITIAL_VELOCITY = {
     "NEPTUNE": 2 * PI * DISTANCE["SUN_NEPTUNE"] / TIME_PERIOD["NEPTUNE"],
     "PLUTO": 2 * PI * DISTANCE["SUN_PLUTO"] / TIME_PERIOD["PLUTO"],
 }
+
+# Colors for MatplotLib
+
+COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
