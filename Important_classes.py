@@ -1,5 +1,6 @@
 from Global_constants import *
 import matplotlib.pyplot as plt
+import pygame
 
 class Object2D:
     def __init__ (self, name, mass, position_initial, velocity_initial):
@@ -26,6 +27,7 @@ class Object2D:
     def updateAcceleration (self, ax_new, ay_new):
         self.acceleration[0] = ax_new
         self.acceleration[1] = ay_new
+    
 
 class TwoBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D):
@@ -104,6 +106,28 @@ class TwoBodySystem:
         plt.plot(self.verlet_trajectory[0],self.verlet_trajectory[1])
         plt.legend(loc = 'best')
         plt.show()
+
+    def visualize_trajectory(self):
+        pygame.init()
+        win = pygame.display.set_mode((500,500))
+        radius=7.5
+        time_stamp=0
+        length=len(self.euler_trajectory[0])
+        run=True
+        while run:
+            pygame.time.delay(100)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+            pygame.draw.circle(win, (0, 200, 255), (self.euler_trajectory[0][time_stamp], self.euler_trajectory[1][time_stamp]), radius/3)
+
+            pygame.display.update()
+            if time_stamp<length-2:
+                time_stamp+=1
+
+        pygame.quit()
 
 class ThreeBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D_1, orbiting_object2D_2):
