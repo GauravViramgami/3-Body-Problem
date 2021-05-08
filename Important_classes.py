@@ -48,6 +48,7 @@ class TwoBodySystem:
         self.ronald_ruth_3rdorder_trajectory = [[], []]
         self.ronald_ruth_4thorder_trajectory = [[], []]
 
+    #initialize the objects for the Two body system
     def initialize_objects(self):
         self.reference_object2D.position = self.reference_object2D.position_initial
         self.orbiting_object2D.position = self.orbiting_object2D.position_initial
@@ -55,11 +56,13 @@ class TwoBodySystem:
         self.orbiting_object2D.velocity = self.orbiting_object2D.velocity_initial
         self.updateAcceleration()
 
+    #updates the acceleration
     def updateAcceleration(self):
         acceleration_reference_orbiting_x = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[0] - self.reference_object2D.position[0])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)
         acceleration_reference_orbiting_y = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D.position[1] - self.reference_object2D.position[1])) / ((self.orbiting_object2D.euclideanDistance(self.reference_object2D.position))**3)
         self.orbiting_object2D.updateAcceleration(acceleration_reference_orbiting_x, acceleration_reference_orbiting_y)
 
+    #function for calculating the trajectory using the Euler Method
     def euler_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -87,6 +90,7 @@ class TwoBodySystem:
 
         self.variable_trajectory = self.euler_trajectory
 
+    #function for calculating the trajectory using the Euler Cromer Method
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_cromer_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -114,6 +118,7 @@ class TwoBodySystem:
 
         self.variable_trajectory = self.euler_cromer_trajectory
 
+    #function for calculating the trajectory using the Verlet Method
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -139,6 +144,7 @@ class TwoBodySystem:
 
         self.variable_trajectory = self.verlet_trajectory
 
+    #function for calculating the trajectory using Ronald Ruth Third order Method
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_3rdorder_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -181,6 +187,7 @@ class TwoBodySystem:
 
         self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
 
+    #function for calculating the trajectory using Ronald Ruth fourth order Method
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[self.orbiting_object2D.position_initial[0]], [self.orbiting_object2D.position_initial[1]]]
@@ -223,6 +230,7 @@ class TwoBodySystem:
 
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
 
+    #function to plot the trajectory calculated by Euler Method
     def plot_euler_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_trajectory[0], self.euler_trajectory[1], label = self.orbiting_object2D.name)
@@ -232,6 +240,7 @@ class TwoBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Euler cromer Method
     def plot_euler_cromer_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_cromer_trajectory[0], self.euler_cromer_trajectory[1], label = self.orbiting_object2D.name)
@@ -241,6 +250,7 @@ class TwoBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by verlet Method
     def plot_verlet_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.verlet_trajectory[0], self.verlet_trajectory[1], label = self.orbiting_object2D.name)
@@ -250,6 +260,7 @@ class TwoBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Ronald Ruth Third order Method
     def plot_ronald_ruth_3rdorder_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_3rdorder_trajectory[0], self.ronald_ruth_3rdorder_trajectory[1], label = self.orbiting_object2D.name)
@@ -259,6 +270,7 @@ class TwoBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Ronald Ruth fourth order Method
     def plot_ronald_ruth_4thorder_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_4thorder_trajectory[0], self.ronald_ruth_4thorder_trajectory[1], label = self.orbiting_object2D.name)
@@ -268,6 +280,7 @@ class TwoBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #using pygame to visualize the trajectory followed 
     def visualize_trajectory(self):
         pygame.init()
         win = pygame.display.set_mode((720,720))
@@ -305,6 +318,7 @@ class ThreeBodySystem:
         self.ronald_ruth_3rdorder_trajectory = [[[], []], [[], []]]
         self.ronald_ruth_4thorder_trajectory = [[[], []], [[], []]]
 
+    #initializing objects for the three body system
     def initialize_objects(self):
         self.reference_object2D.position = self.reference_object2D.position_initial
         self.orbiting_object2D_1.position = self.orbiting_object2D_1.position_initial
@@ -314,6 +328,7 @@ class ThreeBodySystem:
         self.orbiting_object2D_2.velocity = self.orbiting_object2D_2.velocity_initial
         self.updateAcceleration()
 
+    #updating the accelerations
     def updateAcceleration(self):
         acceleration_reference_orbiting1_x = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_object2D_1.position[0] - self.reference_object2D.position[0])) / ((self.orbiting_object2D_1.euclideanDistance(self.reference_object2D.position))**3)
         acceleration_orbiting2_orbiting1_x = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.orbiting_object2D_2.name] * (self.orbiting_object2D_1.position[0] - self.orbiting_object2D_2.position[0])) / ((self.orbiting_object2D_1.euclideanDistance(self.orbiting_object2D_2.position))**3)
@@ -328,6 +343,7 @@ class ThreeBodySystem:
         self.orbiting_object2D_1.updateAcceleration(acceleration_reference_orbiting1_x + acceleration_orbiting2_orbiting1_x, acceleration_reference_orbiting1_y + acceleration_orbiting2_orbiting1_y)
         self.orbiting_object2D_2.updateAcceleration(acceleration_reference_orbiting2_x + acceleration_orbiting1_orbiting2_x, acceleration_reference_orbiting2_y + acceleration_orbiting1_orbiting2_y)
 
+    #calculating the trajectory using the Euler Method
     def euler_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -365,6 +381,7 @@ class ThreeBodySystem:
 
         self.variable_trajectory = self.euler_trajectory
 
+    #calculating the trajectory using the Euler Cromer Method
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_cromer_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -402,6 +419,7 @@ class ThreeBodySystem:
 
         self.variable_trajectory = self.euler_cromer_trajectory
 
+    #calculating the trajectory using the Verlet Method
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -437,6 +455,7 @@ class ThreeBodySystem:
 
         self.variable_trajectory = self.verlet_trajectory
 
+    #calculating the trajectory using the Ronald Ruth 3rd order Method
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_3rdorder_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -516,6 +535,7 @@ class ThreeBodySystem:
 
         self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
 
+    #calculating the trajectory using the Ronald Ruth 4th order Method
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[[self.orbiting_object2D_1.position_initial[0]], [self.orbiting_object2D_1.position_initial[1]]], [[self.orbiting_object2D_2.position_initial[0]], [self.orbiting_object2D_2.position_initial[1]]]]
@@ -595,6 +615,7 @@ class ThreeBodySystem:
 
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
 
+    #plotting the trajectory calculated using the Euler Method
     def plot_euler_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_trajectory[0][0], self.euler_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
@@ -605,6 +626,7 @@ class ThreeBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #plotting the trajectory calculated using the Euler Cromer Method
     def plot_euler_cromer_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.euler_cromer_trajectory[0][0], self.euler_cromer_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
@@ -615,6 +637,7 @@ class ThreeBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #plotting the trajectory calculated using the Verlet Method
     def plot_verlet_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.verlet_trajectory[0][0], self.verlet_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
@@ -625,6 +648,7 @@ class ThreeBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #plotting the trajectory calculated using the Ronald Ruth 3rd order Method
     def plot_ronald_ruth_3rd_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_3rd_trajectory[0][0], self.ronald_ruth_3rd_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
@@ -635,6 +659,7 @@ class ThreeBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #plotting the trajectory calculated using the Ronald Ruth 4th order Method
     def plot_ronald_ruth_4th_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         plt.plot(self.ronald_ruth_4th_trajectory[0][0], self.ronald_ruth_4th_trajectory[0][1], color = 'r', label = self.orbiting_object2D_1.name)
@@ -645,6 +670,7 @@ class ThreeBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #using pygame to visualize the trajectory followed 
     def visualize_trajectory(self):
         pygame.init()
         win = pygame.display.set_mode((720,720))
@@ -684,6 +710,7 @@ class NBodySystem:
         self.ronald_ruth_3rdorder_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
         self.ronald_ruth_4thorder_trajectory = [[[], []] for i in range(len(orbiting_objects2D))]
 
+    #initialize all the N objects for the NBodySystem
     def initialize_objects(self):
         self.reference_object2D.position = self.reference_object2D.position_initial
         self.reference_object2D.velocity = self.reference_object2D.velocity_initial
@@ -692,6 +719,7 @@ class NBodySystem:
             self.orbiting_objects2D[i].velocity = self.orbiting_objects2D[i].velocity_initial
         self.updateAcceleration()
 
+    #updates the acceleration
     def updateAcceleration(self):
         for i in range(len(self.orbiting_objects2D)):
             acceleration_x = -1 * (CONVERSION_CONSTANT * GRAVITATIONAL_CONSTANT * MASS[self.reference_object2D.name] * (self.orbiting_objects2D[i].position[0] - self.reference_object2D.position[0])) / ((self.orbiting_objects2D[i].euclideanDistance(self.reference_object2D.position))**3)
@@ -704,6 +732,7 @@ class NBodySystem:
 
             self.orbiting_objects2D[i].updateAcceleration(acceleration_x, acceleration_y)
 
+    #Calculating the trajectory using the Euler method
     def euler_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -740,6 +769,7 @@ class NBodySystem:
 
         self.variable_trajectory = self.euler_trajectory
 
+    #Calculating the trajectory using the Euler Cromer method
     def euler_cromer_method(self, stepsize, num_iterations):
         self.initialize_objects()
         self.euler_cromer_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -776,6 +806,7 @@ class NBodySystem:
 
         self.variable_trajectory = self.euler_cromer_trajectory
 
+    #Calculating the trajectory using the Verlet method
     def verlet_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.verlet_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -812,6 +843,7 @@ class NBodySystem:
 
         self.variable_trajectory = self.verlet_trajectory
 
+    #Calculating the trajectory using 3rd order Ronald Ruth method
     def ronald_ruth_3rdorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_3rdorder_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -876,6 +908,7 @@ class NBodySystem:
 
         self.variable_trajectory = self.ronald_ruth_3rdorder_trajectory
 
+    #Calculating the trajectory using 4th order Ronald Ruth method
     def ronald_ruth_4thorder_method (self, stepsize, num_iterations):
         self.initialize_objects()
         self.ronald_ruth_4thorder_trajectory = [[[self.orbiting_objects2D[i].position_initial[0]], [self.orbiting_objects2D[i].position_initial[1]]] for i in range(len(self.orbiting_objects2D))]
@@ -939,7 +972,8 @@ class NBodySystem:
             orbiting_ay_prev = [self.orbiting_objects2D[i].acceleration[1] for i in range(len(self.orbiting_objects2D))]
 
         self.variable_trajectory = self.ronald_ruth_4thorder_trajectory
-            
+    
+    #function to plot the trajectory calculated by Euler Method
     def plot_euler_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
@@ -950,6 +984,7 @@ class NBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Euler Cromer Method
     def plot_euler_cromer_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
@@ -960,6 +995,7 @@ class NBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by verlet method
     def plot_verlet_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
@@ -970,6 +1006,7 @@ class NBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Ronald Ruth third order Method
     def plot_ronald_ruth_3rdorder_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
@@ -980,6 +1017,7 @@ class NBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #function to plot the trajectory calculated by Ronald Ruth fourth order Method
     def plot_ronald_ruth_4thorder_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
         for i in range(len(self.orbiting_objects2D)):
@@ -990,6 +1028,7 @@ class NBodySystem:
         plt.ylabel("y positions (in AU)")
         plt.show()
 
+    #using pygame to visualize the trajectory followed 
     def visualize_trajectory(self):
         pygame.init()
         win = pygame.display.set_mode((720,720))
