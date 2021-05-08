@@ -31,8 +31,12 @@ import matplotlib.pyplot as plt
 # case4.verlet_method(stepsize, num_iterations)
 # case4.plot_verlet_trajectory()
 
-stepsize = 0.002
-num_iterations = 100000
-case4 = NBodySystem(OBJECTS["SUN"], [OBJECTS["MARS"], OBJECTS["ASTEROID1"], OBJECTS["ASTEROID2"], OBJECTS["JUPITER"]])
-case4.verlet_method(stepsize, num_iterations)
-case4.plot_verlet_trajectory()
+# stepsize = 0.002
+# num_iterations = 100000
+# case4 = NBodySystem(OBJECTS["SUN"], [OBJECTS["MARS"], OBJECTS["ASTEROID1"], OBJECTS["ASTEROID2"], OBJECTS["JUPITER"]])
+# case4.verlet_method(stepsize, num_iterations)
+# case4.plot_verlet_trajectory()
+
+case = ThreeBodySystem(OBJECTS["SUN"], OBJECTS["EARTH"], OBJECTS["MOON"])
+case.verlet_method(0.00002, 1000)
+case.plot_verlet_trajectory()

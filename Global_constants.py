@@ -10,18 +10,19 @@ CONVERSION_CONSTANT = ((6.68455e-12)**3)/((3.17098e-8)**2)
 # Mass (in kg)
 MASS = {
     "SUN": 1.989e30, 
-    "MERCURY": 2.4e23,
+    "MERCURY": 3.285e23,
     "VENUS": 4.9e24,
     "EARTH": 6.0e24,
-    "MARS" : 6.6e23,
+    "MARS" : 6.42e23,
     "JUPITER": 1.9e27,
     "SATURN": 5.7e26,
     "URANUS": 8.8e25,
     "NEPTUNE": 1.03e26,
-    "PLUTO": 6.0e24,
+    "PLUTO": 1.462e22,
     "JUPITER_1000": 1.9e30,
     "ASTEROID1": 2.8e21,
     "ASTEROID2": 3.2e21,
+    "MOON": 0.07346e24,
 }
 
 # Distance (in AU)
@@ -39,6 +40,7 @@ DISTANCE = {
     "SUN_JUPITER_1000": 5.20,
     "SUN_ASTEROID1": 2.7,
     "SUN_ASTEROID2": 3.1,
+    "EARTH_MOON": 0.00256955529,
 }
 
 # Time Period (in yr)
@@ -55,6 +57,7 @@ TIME_PERIOD = {
     "JUPITER_1000": 11.8600,
     "ASTEROID1": 4,
     "ASTEROID2": 5,
+    "MOON": 27.322/365,
 }
 
 # Initial Velocity (in AU/yr)
@@ -71,6 +74,7 @@ INITIAL_VELOCITY = {
     "ASTEROID1": 2 * PI * DISTANCE["SUN_ASTEROID1"] / TIME_PERIOD["ASTEROID1"],
     "ASTEROID2": 2 * PI * DISTANCE["SUN_ASTEROID2"] / TIME_PERIOD["ASTEROID2"],
     "JUPITER_1000": 2 * PI * DISTANCE["SUN_JUPITER_1000"] / TIME_PERIOD["JUPITER_1000"],
+    "MOON": 0.21968, # 2 * PI * DISTANCE["EARTH_MOON"] / TIME_PERIOD["MOON"]
 }
 
 # Colors for MatplotLib
