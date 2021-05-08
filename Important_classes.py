@@ -1,8 +1,10 @@
-from Global_constants import *
+from Global_constants import *       #importing required libraries
 import matplotlib.pyplot as plt
 import pygame
 
-class Object2D:
+#Defining a class for function of Objects
+class Object2D:                
+    #initializing an Object2D with given properties            
     def __init__ (self, name, mass, position_initial, velocity_initial):
         self.name = name
         self.mass = mass
@@ -11,23 +13,29 @@ class Object2D:
         self.position = position_initial
         self.velocity = velocity_initial
         self.acceleration = [0, 0]
-        
+    
+    #function to calculate distance of given object from another
     def euclideanDistance (self, from_position):
         r = (((self.position[0] - from_position[0])**2) + ((self.position[1] - from_position[1])**2))**(1/2)
         return r
     
+    #updates the current location
     def updatePosition (self, x_new, y_new):
         self.position[0] = x_new
         self.position[1] = y_new
         
+    #updates the current velocity
     def updateVelocity (self, vx_new, vy_new):
         self.velocity[0] = vx_new
         self.velocity[1] = vy_new
     
+    #updates the current acceleration
     def updateAcceleration (self, ax_new, ay_new):
         self.acceleration[0] = ax_new
         self.acceleration[1] = ay_new
 
+
+#Defining a class for function of Two Body System
 class TwoBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D):
         self.reference_object2D = reference_object2D
@@ -282,6 +290,8 @@ class TwoBodySystem:
 
         pygame.quit()
 
+
+#Defining a class for function of Three Body System
 class ThreeBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D_1, orbiting_object2D_2):
         self.reference_object2D = reference_object2D
@@ -661,6 +671,7 @@ class ThreeBodySystem:
 
         pygame.quit()
 
+#Defining a class for function of N Body System
 class NBodySystem:
     def __init__ (self, reference_object2D, orbiting_objects2D):
         self.reference_object2D = reference_object2D
