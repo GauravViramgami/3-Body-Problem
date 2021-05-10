@@ -62,11 +62,26 @@ stepsize = 0.002
 num_iterations = 100000
 case5 = NBodySystem(OBJECTS["SUN"], [OBJECTS["MARS"], OBJECTS["ASTEROID1"], OBJECTS["ASTEROID2"], OBJECTS["JUPITER"]])
 
-case5.euler_method(stepsize, num_iterations)
-case5.plot_euler_trajectory()
+# case5.euler_method(stepsize, num_iterations)
+# case5.plot_euler_trajectory()
 
-case5.euler_cromer_method(stepsize, num_iterations)
-case5.plot_euler_cromer_trajectory()
+# case5.euler_cromer_method(stepsize, num_iterations)
+# case5.plot_euler_cromer_trajectory()
 
 case5.verlet_method(stepsize, num_iterations)
-case5.plot_verlet_trajectory()
+# case5.plot_verlet_trajectory()
+case5.visualize_trajectory()
+
+## Case:6
+# stepsize = 0.002
+# num_iterations = 100000
+# case6 = ThreeBodySystem(OBJECTS["SUN"], OBJECTS["EARTH"], OBJECTS["MOON"])
+
+# case6.euler_method(stepsize, num_iterations)
+# case6.plot_euler_trajectory()
+
+# case6.euler_cromer_method(stepsize, num_iterations)
+# case6.plot_euler_cromer_trajectory()
+
+# case6.verlet_method(stepsize, num_iterations)
+# case6.plot_verlet_trajectory()

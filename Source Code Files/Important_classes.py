@@ -34,7 +34,6 @@ class Object2D:
         self.acceleration[0] = ax_new
         self.acceleration[1] = ay_new
 
-
 #Defining a class for function of Two Body System
 class TwoBodySystem:
     def __init__ (self, reference_object2D, orbiting_object2D):
@@ -102,14 +101,21 @@ class TwoBodySystem:
         while (iterations < num_iterations):
             iterations = iterations + 1
             
-            self.orbiting_object2D.updateVelocity(vx_prev + (self.orbiting_object2D.acceleration[0] * stepsize), vy_prev + (self.orbiting_object2D.acceleration[1] * stepsize)) 
+            # self.orbiting_object2D.updateVelocity(vx_prev + (self.orbiting_object2D.acceleration[0] * stepsize), vy_prev + (self.orbiting_object2D.acceleration[1] * stepsize)) 
 
+            # self.orbiting_object2D.updatePosition(x_prev + (self.orbiting_object2D.velocity[0] * stepsize), y_prev + (self.orbiting_object2D.velocity[1] * stepsize)) 
+
+            # # It is working here as non-energy preserving euler method
+            # # self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize), y_prev + (vy_prev * stepsize)) 
+
+            # self.updateAcceleration() 
             self.orbiting_object2D.updatePosition(x_prev + (self.orbiting_object2D.velocity[0] * stepsize), y_prev + (self.orbiting_object2D.velocity[1] * stepsize)) 
 
             # It is working here as non-energy preserving euler method
             # self.orbiting_object2D.updatePosition(x_prev + (vx_prev * stepsize), y_prev + (vy_prev * stepsize)) 
 
             self.updateAcceleration()
+            self.orbiting_object2D.updateVelocity(vx_prev + (self.orbiting_object2D.acceleration[0] * stepsize), vy_prev + (self.orbiting_object2D.acceleration[1] * stepsize))
             self.euler_cromer_trajectory[0].append(self.orbiting_object2D.position[0])
             self.euler_cromer_trajectory[1].append(self.orbiting_object2D.position[1])
 
@@ -302,7 +308,6 @@ class TwoBodySystem:
                 time_stamp+=1
 
         pygame.quit()
-
 
 #Defining a class for function of Three Body System
 class ThreeBodySystem:
@@ -647,7 +652,7 @@ class ThreeBodySystem:
         plt.xlabel("x positions (in AU)")
         plt.ylabel("y positions (in AU)")
         plt.show()
-
+        
     #plotting the trajectory calculated using the Ronald Ruth 3rd order Method
     def plot_ronald_ruth_3rd_trajectory(self):
         plt.plot(self.reference_object2D.position[0], self.reference_object2D.position[1], marker='o', markersize=5, color = 'y', label = self.reference_object2D.name)
@@ -1043,7 +1048,7 @@ class NBodySystem:
             scaling=max(scaling,DISTANCE["SUN_"+self.orbiting_objects2D[i].name])
 
         while run:
-            pygame.time.delay(10)
+            pygame.time.delay(1)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
